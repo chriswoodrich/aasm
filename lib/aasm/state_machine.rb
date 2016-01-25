@@ -10,13 +10,14 @@ module AASM
       (@machines ||= {})[klass.to_s] = machine
     end
 
-    attr_accessor :states, :events, :initial_state, :config, :name, :global_callbacks
+    attr_accessor :states, :events, :initial_state, :config, :name, :global_callbacks, :new_method
 
     def initialize(name)
       @initial_state = nil
       @states = []
       @events = {}
       @global_callbacks = {}
+      @new_method = {}
       @config = AASM::Configuration.new
       @name = name
     end
