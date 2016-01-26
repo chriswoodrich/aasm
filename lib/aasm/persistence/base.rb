@@ -54,7 +54,6 @@ module AASM
   class Base
     # make sure to create a (named) scope for each state
     def state_with_scope(name, *args, &block)
-      @new_methods ||= {}
       define_state_method(name, args, &block) if block_given?
       state_without_scope(name, *args)
       create_scope(name) if create_scope?(name)
@@ -115,8 +114,8 @@ module AASM
     end
 
     def define_state_method(name, args, &block)
-      @state_machine.new_method[block.call] = method(block.call)
-      @klass.class_eval(&block) if args.first && args.first[:initial]
+       StateMethod.new(name, method(block.call)) if block_given?
+       @klass.class_eval(&block) if args.first && args.first[:initial]
     end
 
   end # Base

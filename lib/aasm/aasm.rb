@@ -168,8 +168,14 @@ private
     else
       self.aasm_event_failed(event.name, old_state.name) if self.respond_to?(:aasm_event_failed)
     end
+    redefine_state_methods(old_state, new_state_name) if persist_successful
 
     persist_successful
+  end
+
+  def redefine_state_methods(old_state, new_state_name)
+    StateMethod.undefine_state_method(self, old_state.name)
+    StateMethod.define_state_method(self, new_state_name)
   end
 
   def aasm_failed(state_machine_name, event_name, old_state, failures = [])
